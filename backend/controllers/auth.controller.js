@@ -43,6 +43,12 @@ export const signup = async (req, res) => {
         fullName: newUser.fullName,
         username: newUser.username,
         email: newUser.email,
+        Bio: newUser.bio,
+        link: newUser.link,
+        profileImg: newUser.profileImg,
+        coverImg: newUser.coverImg,
+        followers: newUser.followers,
+        following: newUser.following,
       });
     } else {
       res.status(400).json({
@@ -70,6 +76,12 @@ export const login = async (req, res) => {
       fullName: user.fullName,
       username: user.username,
       email: user.email,
+      Bio: user.bio,
+      link: user.link,
+      profileImg: user.profileImg,
+      coverImg: user.coverImg,
+      followers: user.followers,
+      following: user.following,
     });
   } catch (error) {
     console.log("Error is signup controller", error.message);
