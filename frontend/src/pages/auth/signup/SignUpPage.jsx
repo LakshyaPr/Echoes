@@ -35,15 +35,12 @@ const SignUpPage = () => {
           );
         }
 
-        console.log(data);
         return data;
       } catch (error) {
-        console.log(error);
         throw error;
       }
     },
     onSuccess: () => {
-      console.log("Account created successfully");
       toast.success("Account created successfully");
     },
   });

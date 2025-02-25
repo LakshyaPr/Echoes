@@ -31,7 +31,6 @@ const Post = ({ post }) => {
           throw new Error(data.error);
         }
         return data;
-        console.log(data);
       } catch (error) {
         throw new Error(error);
       }
