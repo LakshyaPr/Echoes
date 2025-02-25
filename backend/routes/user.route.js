@@ -1,5 +1,5 @@
 import express from "express";
-import { protectRoute } from "../middleware/protectroute.js";
+import { protectRoute } from "../middleware/protectRoute.js";
 import {
   followUnfollowUser,
   getSuggestedUsers,
