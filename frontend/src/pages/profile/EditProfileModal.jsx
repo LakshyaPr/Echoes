@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+
+import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
 const EditProfileModal = ({ authUser }) => {
   const [formData, setFormData] = useState({
@@ -10,41 +10,10 @@ const EditProfileModal = ({ authUser }) => {
     bio: "",
     link: "",
     newPassword: "",
-    currentPassword: "",
+    currPassword: "",
   });
 
-  const queryClient = useQueryClient();
-
-  const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
-    mutationFn: async () => {
-      try {
-        const res = await fetch("/api/user/update", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
-        return data;
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
-    onSuccess: () => {
-      toast.success("Profile Updated Successfully");
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-        queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
-      ]);
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+  const { updateProfile, isUpdatingProfile } = useUpdateUserProfile();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,7 +28,7 @@ const EditProfileModal = ({ authUser }) => {
         bio: authUser.bio,
         link: authUser.link,
         newPassword: "",
-        currentPassword: "",
+        currPassword: "",
       });
     }
   }, [authUser]);
@@ -81,7 +50,7 @@ const EditProfileModal = ({ authUser }) => {
             className="flex flex-col gap-4"
             onSubmit={(e) => {
               e.preventDefault();
-              updateProfile();
+              updateProfile(formData);
             }}
           >
             <div className="flex flex-wrap gap-2">
@@ -124,8 +93,8 @@ const EditProfileModal = ({ authUser }) => {
                 type="password"
                 placeholder="Current Password"
                 className="flex-1 input border border-gray-700 rounded p-2 input-md"
-                value={formData.currentPassword}
-                name="currentPassword"
+                value={formData.currPassword}
+                name="currPassword"
                 onChange={handleInputChange}
               />
               <input
