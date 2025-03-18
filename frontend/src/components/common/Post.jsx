@@ -18,6 +18,9 @@ const Post = ({ post }) => {
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
   const isMyPost = authUser._id == post.user._id;
+  const postId = post._id;
+  let isSaved = authUser.savedposts.includes(postId);
+
   const formattedDate = formatPostDate(post.createdAt);
 
   const { mutate: deletePost, isPending: isDeleting } = useMutation({
@@ -41,7 +44,24 @@ const Post = ({ post }) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
-
+  const { mutate: savePost, isPending: isSaving } = useMutation({
+    mutationFn: async () => {
+      try {
+        console.log(post._id);
+        const res = await fetch(`/api/posts/save/${post._id}`, {
+          method: "POST",
+        });
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+    onSuccess: (updatedLikes) => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
   const { mutate: likePost, isPending: isLiking } = useMutation({
     mutationFn: async () => {
       try {
@@ -264,8 +284,22 @@ const Post = ({ post }) => {
                 </span>
               </div>
             </div>
-            <div className="flex w-1/3 justify-end gap-2 items-center">
-              <FaRegBookmark className="w-4 h-4 text-slate-500 cursor-pointer" />
+            <div
+              className="flex w-1/3 justify-end gap-2 items-center"
+              onClick={savePost}
+            >
+              {isSaving && <LoadingSpinner size="sm" />}
+              {!isSaved && !isSaving && (
+                <FaRegBookmark className="w-4 h-4 text-sky-500 cursor-pointer filter grayscale" />
+              )}
+              {isSaved && !isSaving && (
+                <FaRegBookmark className="w-4 h-4 text-sky-500 cursor-pointer" />
+              )}
+              <span
+                className={`text-sm  group-hover:text-pink-500 ${
+                  isSaved ? "text-pink-500" : "text-slate-500"
+                }`}
+              ></span>
             </div>
           </div>
         </div>

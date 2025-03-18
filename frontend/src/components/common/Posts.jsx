@@ -14,6 +14,8 @@ const Posts = ({ feedType, username, userId }) => {
         return `/api/posts/user/${username}`;
       case "likes":
         return `/api/posts/likes/${userId}`;
+      case "saved":
+        return `/api/posts/saved/${userId}`;
       default:
         return "/api/posts/all";
     }
@@ -31,6 +33,7 @@ const Posts = ({ feedType, username, userId }) => {
       try {
         const res = await fetch(POST_ENDPOINT);
         const data = await res.json();
+
         if (!res.ok) {
           throw new Error(data.error || "Something  went wrong");
         }

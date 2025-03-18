@@ -226,6 +226,18 @@ const ProfilePage = () => {
                     <div className="absolute bottom-0 w-10 h-1 rounded-full bg-primary" />
                   )}
                 </div>
+                {isMyProfile ? (
+                  <div
+                    className="flex justify-center flex-1 p-3 text-slate-500 hover:bg-secondary transition duration-300 relative cursor-pointer"
+                    onClick={() => setFeedType("saved")}
+                  >
+                    Saved
+                    {feedType === "saved" && (
+                      <div className="absolute bottom-0 w-10 h-1 rounded-full bg-primary" />
+                    )}
+                  </div>
+                ) : null}
+
                 <div
                   className="flex justify-center flex-1 p-3 text-slate-500 hover:bg-secondary transition duration-300 relative cursor-pointer"
                   onClick={() => setFeedType("likes")}

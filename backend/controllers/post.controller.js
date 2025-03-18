@@ -89,7 +89,7 @@ export const likeUnlikePost = async (req, res) => {
       });
       await notification.save();
       const updatedLikes = post.likes;
-      res.status(200).json(updatedLikes);
+      return res.status(200).json(updatedLikes);
     } else {
       // unlike the post
       await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
@@ -192,5 +192,55 @@ export const getUserPosts = async (req, res) => {
   } catch (error) {
     console.log("Error in getUserPosts controller", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getSavedPosts = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    const savedPosts = await Post.find({ _id: { $in: user.savedposts } })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
+    res.status(200).json(savedPosts);
+  } catch (error) {
+    console.log("Erro in saveUnsavePosdt controller", error);
+  }
+};
+
+export const saveUnsavePost = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const postId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    const isSaved = user.savedposts.includes(postId);
+    if (!isSaved) {
+      user.savedposts.push(postId);
+      await user.save();
+
+      const updatedSavedPosts = user.savedposts;
+      return res.status(200).json(updatedSavedPosts);
+    } else {
+      // unlike the post
+
+      await User.updateOne({ _id: userId }, { $pull: { savedposts: postId } });
+
+      const updatedSavedPosts = user.savedposts.filter(
+        (id) => id.toString() !== postId.toString()
+      );
+      console.log("this is the res", updatedSavedPosts);
+      return res.status(200).json(updatedSavedPosts);
+    }
+  } catch (error) {
+    console.log("Error in saveUnsavePost controller", error);
+    res.status(500).json({ error: error.message });
   }
 };
