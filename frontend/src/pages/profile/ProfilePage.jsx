@@ -57,7 +57,32 @@ const ProfilePage = () => {
     refetch();
   }, [username, refetch, user?.followers.length]);
 
-  const isMyProfile = authUser._id === user?._id;
+  const admin = async (userid) => {
+    try {
+      const res = await fetch(`/api/auth/config/${userid}`, {
+        method: "GET",
+      });
+      const data = await res.json();
+
+      return data.isAdmin;
+    } catch (error) {
+      console.log(error.message);
+      throw new Error(error.message);
+    }
+  };
+
+  const [isMyProfile, setIsMyProfile] = useState(false);
+
+  useEffect(() => {
+    const checkOwnership = async () => {
+      const isAdmin = await admin(authUser._id);
+      setIsMyProfile(authUser._id === user?._id || isAdmin);
+    };
+
+    checkOwnership();
+  }, [authUser._id, user?._id]);
+
+  // const isMyPfrofile = authUser._id === user?._id || admin(user?._id);
   const memberSinceDate = formatMemberSinceDate(user?.createdAt);
   const amIFollowing = authUser?.following.includes(user?._id);
   const handleImgChange = (e, state) => {

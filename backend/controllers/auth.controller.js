@@ -108,3 +108,27 @@ export const getMe = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const getAdminId = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+    console.log("Received userId:", typeof userId, userId);
+    console.log(
+      "Admin ID from .env:",
+      typeof process.env.ADMIN_ID,
+      process.env.ADMIN_ID
+    );
+
+    if (String(userId) === String(process.env.ADMIN_ID)) {
+      return res.status(200).json({ isAdmin: true });
+    }
+
+    return res.status(200).json({ isAdmin: false });
+  } catch (error) {
+    console.log("Error in getAdminId controller", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};

@@ -3,7 +3,7 @@ import { BiRepost } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -17,7 +17,32 @@ const Post = ({ post }) => {
 
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
-  const isMyPost = authUser._id == post.user._id;
+
+  const admin = async (userid) => {
+    try {
+      const res = await fetch(`/api/auth/config/${userid}`, {
+        method: "GET",
+      });
+      const data = await res.json();
+
+      return data.isAdmin;
+    } catch (error) {
+      console.log(error.message);
+      throw new Error(error.message);
+    }
+  };
+
+  const [isMyPost, setIsMyPost] = useState(false);
+
+  useEffect(() => {
+    const checkOwnership = async () => {
+      const isAdmin = await admin(authUser._id);
+      setIsMyPost(authUser._id === post.user._id || isAdmin);
+    };
+
+    checkOwnership();
+  }, [authUser._id, post.user._id]);
+
   const postId = post._id;
   let isSaved = authUser.savedposts.includes(postId);
 
