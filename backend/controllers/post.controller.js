@@ -247,3 +247,58 @@ export const saveUnsavePost = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const repostPostUnrepost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+    const userId = req.user._id.toString();
+    if (
+      post.reposts.some((repost) => repost.repostuserid.toString() === userId)
+    ) {
+      await Post.updateOne(
+        { _id: postId },
+        { $pull: { reposts: { repostuserid: userId } } }
+      );
+      const updatedReposts = post.reposts.filter(
+        (repost) => repost.repostuserid.toString() !== userId.toString()
+      );
+      const repost = post.reposts.find(
+        (repost) => repost.repostuserid.toString() === userId.toString()
+      );
+      if (repost) {
+        await Post.findByIdAndDelete(repost?.repostpostid);
+      }
+      return res.status(200).json(updatedReposts);
+    }
+    // const { text } = req.body;
+    // let { img } = req.body;
+    else {
+      const text = post.text;
+      const img = post.img;
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ error: "User not found" });
+      if (!text && !img)
+        return res
+          .status(400)
+          .json({ error: "Post must have a text or image" });
+
+      const newPost = new Post({
+        user: userId,
+        text,
+        img,
+        repostedFrom: post.user,
+      });
+      await newPost.save();
+      post.reposts.push({ repostuserid: userId, repostpostid: newPost._id });
+      await post.save();
+      res.status(201).json(newPost);
+    }
+  } catch (error) {
+    console.log("Error in repostPost controller", error);
+    res.status(500).json({ error: error.message });
+  }
+};

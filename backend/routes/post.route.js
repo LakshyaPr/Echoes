@@ -11,6 +11,7 @@ import {
   getUserPosts,
   getSavedPosts,
   saveUnsavePost,
+  repostPostUnrepost,
 } from "../controllers/post.controller.js";
 const router = express.Router();
 router.get("/all", protectRoute, getAllPosts);
@@ -23,5 +24,6 @@ router.post("/like/:id", protectRoute, likeUnlikePost);
 router.post("/comment/:id", protectRoute, commentOnPost);
 router.get("/saved/:id", protectRoute, getSavedPosts);
 router.post("/save/:id", protectRoute, saveUnsavePost);
+router.post("/repost/:id", protectRoute, repostPostUnrepost);
 
 export default router;

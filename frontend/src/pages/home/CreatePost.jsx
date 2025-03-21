@@ -10,6 +10,7 @@ const CreatePost = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
   const imgRef = useRef(null);
+
   const {
     mutate: createPost,
     isPending,
@@ -26,8 +27,9 @@ const CreatePost = () => {
           body: JSON.stringify({ text, img }),
         });
         const data = await res.json();
+
         if (!res.ok) {
-          throw new Error(data.error || "Something sdgfwent wrong ");
+          throw new Error(data.error || "Something went wrong ");
         }
         return data;
       } catch (error) {

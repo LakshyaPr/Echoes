@@ -115,12 +115,6 @@ export const getAdminId = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
-    console.log("Received userId:", typeof userId, userId);
-    console.log(
-      "Admin ID from .env:",
-      typeof process.env.ADMIN_ID,
-      process.env.ADMIN_ID
-    );
 
     if (String(userId) === String(process.env.ADMIN_ID)) {
       return res.status(200).json({ isAdmin: true });

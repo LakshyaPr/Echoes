@@ -17,6 +17,9 @@ const Post = ({ post }) => {
 
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
+  const isReposted = post.reposts.some(
+    (repost) => repost.repostuserid === authUser._id
+  );
 
   const admin = async (userid) => {
     try {
@@ -146,6 +149,37 @@ const Post = ({ post }) => {
     },
     onError: (error) => {
       toast.error(error.message);
+    },
+  });
+
+  const { mutate: repost, isPending: isReposting } = useMutation({
+    mutationFn: async (post) => {
+      try {
+        console.log(post);
+        const res = await fetch(`/api/posts/repost/${post._id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        console.log(data, "repost");
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
+        return data;
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+    onSuccess: () => {
+      if (isReposted) {
+        toast.success("Repost Deleted Successfully");
+      } else {
+        toast.success("Reposted Successfully");
+      }
+
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
@@ -282,11 +316,24 @@ const Post = ({ post }) => {
                   <button className="outline-none">close</button>
                 </form>
               </dialog>
-              <div className="flex gap-1 items-center group cursor-pointer">
-                <BiRepost className="w-6 h-6  text-slate-500 group-hover:text-green-500" />
-                <span className="text-sm text-slate-500 group-hover:text-green-500">
-                  0
-                </span>
+              <div>
+                <div
+                  className="flex gap-1 items-center group cursor-pointer"
+                  onClick={() => {
+                    repost(post);
+                  }}
+                >
+                  {isReposting && <LoadingSpinner size="sm" />}
+                  {!isReposted && !isReposting && (
+                    <BiRepost className="w-6 h-6  text-slate-500 group-hover:text-green-500" />
+                  )}
+                  {isReposted && !isReposting && (
+                    <BiRepost className="w-6 h-6  text-green-500" />
+                  )}
+                  <span className="text-sm text-slate-500 group-hover:text-green-500">
+                    {post.reposts.length}
+                  </span>
+                </div>
               </div>
               <div
                 className="flex gap-1 items-center group cursor-pointer"
