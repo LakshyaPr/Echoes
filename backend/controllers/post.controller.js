@@ -83,7 +83,9 @@ export const likeUnlikePost = async (req, res) => {
     const isLiked = post.likes.includes(userId);
     if (!isLiked) {
       post.likes.push(userId);
+      post.likecount += 1;
       await User.updateOne({ _id: userId }, { $push: { likedposts: postId } });
+
       await post.save();
       const notification = new Notification({
         from: userId,
@@ -95,12 +97,16 @@ export const likeUnlikePost = async (req, res) => {
       return res.status(200).json(updatedLikes);
     } else {
       // unlike the post
-      await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
+      await Post.updateOne(
+        { _id: postId },
+        { $pull: { likes: userId }, $inc: { likecount: -1 } }
+      );
       await User.updateOne({ _id: userId }, { $pull: { likedposts: postId } });
 
       const updatedLikes = post.likes.filter(
         (id) => id.toString() !== userId.toString()
       );
+
       return res.status(200).json(updatedLikes);
     }
   } catch (error) {
@@ -109,10 +115,37 @@ export const likeUnlikePost = async (req, res) => {
   }
 };
 
+// export const getAllPosts = async (req, res) => {
+//   try {
+//     const posts = await Post.find()
+//       .sort({ createdAt: -1 })
+//       .populate({
+//         path: "user",
+//         select: "-password",
+//       })
+//       .populate({
+//         path: "comments.user",
+//         select: "-password",
+//       });
+//     if (posts.length === 0) {
+//       return res.status(200).json([]);
+//     }
+//     res.status(200).json(posts);
+//   } catch (error) {
+//     console.log("Error in getAllPosts controller", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
 export const getAllPosts = async (req, res) => {
   try {
+    const { page = 1 } = req.query;
+    const limit = 8;
+    const skip = (page - 1) * limit;
     const posts = await Post.find()
-      .sort({ createdAt: -1 })
+      .sort({ likecount: -1, createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate({
         path: "user",
         select: "-password",

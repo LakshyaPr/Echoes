@@ -19,6 +19,10 @@ const postSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    likecount: {
+      type: Number,
+      default: 0,
+    },
     reposts: [
       {
         repostuserid: {
