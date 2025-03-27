@@ -1,7 +1,7 @@
 import XSvg from "../svgs/X";
 
 import { MdHomeFilled } from "react-icons/md";
-import { IoNotifications } from "react-icons/io5";
+import { IoNotifications, IoSearch, IoSearchSharp } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
@@ -39,10 +39,19 @@ const Sidebar = () => {
 
   return (
     <div className="md:flex-[2_2_0] w-18 max-w-52">
-      <div className="sticky top-0 left-0 h-screen flex flex-col border-r border-gray-700 w-20 md:w-full">
-        <Link to="/" className="flex justify-center md:justify-start">
-          <XSvg className="px-2 w-12 h-12 rounded-full fill-white hover:bg-stone-900" />
-        </Link>
+      <div className="sticky top-0 left-0 h-screen flex flex-col border-r border-gray-700 w-20 md:w-full pt-3">
+        <div className="pt-3 pr-4">
+          <Link
+            to="/"
+            className="flex items-center justify-center md:justify-start space-x-2 pl-1 rounded-full transition duration-300 hover:bg-stone-900 hover:shadow-lg"
+          >
+            <XSvg className="w-12 h-12 px-1 rounded-full fill-white hover:bg-stone-900" />
+            <p className="text-white text-lg hidden sm:block font-semibold ">
+              ECHOES
+            </p>
+          </Link>
+        </div>
+
         <ul className="flex flex-col gap-3 mt-4">
           <li className="flex justify-center md:justify-start">
             <Link
@@ -51,6 +60,15 @@ const Sidebar = () => {
             >
               <MdHomeFilled className="w-8 h-8" />
               <span className="text-lg hidden md:block">Home</span>
+            </Link>
+          </li>
+          <li className="flex justify-center md:justify-start">
+            <Link
+              to="/search"
+              className="flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer"
+            >
+              <IoSearchSharp className="w-8 h-8" />
+              <span className="text-lg hidden md:block">Search</span>
             </Link>
           </li>
           <li className="flex justify-center md:justify-start">

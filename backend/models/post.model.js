@@ -40,6 +40,10 @@ const postSchema = new mongoose.Schema(
       ref: "User",
       default: null,
     },
+    repostedFromUsername: {
+      type: String,
+      default: null,
+    },
     comments: [
       {
         text: {

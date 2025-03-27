@@ -97,15 +97,14 @@ export const likeUnlikePost = async (req, res) => {
       return res.status(200).json(updatedLikes);
     } else {
       // unlike the post
-      await Post.updateOne(
-        { _id: postId },
-        { $pull: { likes: userId }, $inc: { likecount: -1 } }
-      );
+
+      post.likecount -= 1;
+      post.likes.pull(userId);
+      await post.save();
+
       await User.updateOne({ _id: userId }, { $pull: { likedposts: postId } });
 
-      const updatedLikes = post.likes.filter(
-        (id) => id.toString() !== userId.toString()
-      );
+      const updatedLikes = post.likes;
 
       return res.status(200).json(updatedLikes);
     }
@@ -154,6 +153,7 @@ export const getAllPosts = async (req, res) => {
         path: "comments.user",
         select: "-password",
       });
+    console.log(posts.length);
     if (posts.length === 0) {
       return res.status(200).json([]);
     }
@@ -285,6 +285,8 @@ export const repostPostUnrepost = async (req, res) => {
   try {
     const postId = req.params.id;
     const post = await Post.findById(postId);
+    const postOwner = await User.findById(post.user);
+    const ownerUsername = postOwner.username;
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
@@ -324,6 +326,7 @@ export const repostPostUnrepost = async (req, res) => {
         text,
         img,
         repostedFrom: post.user,
+        repostedFromUsername: ownerUsername,
       });
       await newPost.save();
       post.reposts.push({ repostuserid: userId, repostpostid: newPost._id });

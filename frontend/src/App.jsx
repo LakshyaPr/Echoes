@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/auth/login/LoginPage";
 import NotificationPage from "./pages/notifications/NotificationPage";
+import SearchPage from "./pages/search/SearchPage";
 import SignUpPage from "./pages/auth/signup/SignUpPage";
 import Sidebar from "./components/common/Sidebar";
 import RightPanel from "./components/common/RightPanel";
@@ -59,6 +60,10 @@ function App() {
         <Route
           path="/notifications"
           element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/search"
+          element={authUser ? <SearchPage /> : <Navigate to="/login" />}
         />
       </Routes>
       {authUser && <RightPanel />}

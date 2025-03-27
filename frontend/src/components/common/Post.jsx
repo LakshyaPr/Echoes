@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../utils/date/functions";
 
-const Post = ({ post }) => {
+const Post = ({ post, feedType, username, userId, page }) => {
   const [comment, setComment] = useState("");
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
@@ -110,13 +110,27 @@ const Post = ({ post }) => {
       // queryClient.invalidateQueries({ queryKey: ["posts"] });
       // instead , update the cache directly for the post
       queryClient.setQueryData(["posts"], (oldData) => {
-        return oldData.map((p) => {
+        console.log(oldData);
+        return oldData?.map((p) => {
           if (p._id === post._id) {
             return { ...p, likes: updatedLikes };
           }
+          console.log(p);
           return p;
         });
       });
+      // queryClient.setQueryData(["posts"], (oldData) => {
+      //   if (!oldData) return oldData; // Prevent errors if data is undefined
+
+      //   return {
+      //     ...oldData,
+      //     pages: oldData.pages.map((page) =>
+      //       page.map((p) =>
+      //         p._id === post._id ? { ...p, likes: updatedLikes } : p
+      //       )
+      //     ),
+      //   };
+      // });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -218,6 +232,15 @@ const Post = ({ post }) => {
               <Link to={`/profile/${postOwner.username}`}>
                 @{postOwner.username}
               </Link>
+              <span>·</span>
+              <span className="inline-flex items-center">
+                {post.repostedFrom && (
+                  <>
+                    <BiRepost className="w-6 h-6 mr-1 text-slate-500" />@
+                    {post.repostedFromUsername}
+                  </>
+                )}
+              </span>
               <span>·</span>
               <span>{formattedDate}</span>
             </span>
