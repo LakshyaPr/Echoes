@@ -1,6 +1,6 @@
 # ECHOES — Full-Stack Social Media App 🌐
 
-[Live Demo 🔗](https://your-live-link.com) | [GitHub Repo](https://github.com/your-username/echoes)
+[Live Demo 🔗](https://echoes-32t1.onrender.com/) | [GitHub Repo](https://github.com/LakshyaPr/Echoes)
 
 **ECHOES** is a full-stack social media platform built with the **MERN stack**. It features secure authentication, image sharing, optimized APIs, and responsive design. Designed to simulate real-world scalability, the app emphasizes performance, clean architecture, and modern web practices.
 
