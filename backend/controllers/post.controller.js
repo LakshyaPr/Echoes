@@ -153,7 +153,7 @@ export const getAllPosts = async (req, res) => {
         path: "comments.user",
         select: "-password",
       });
-    console.log(posts.length);
+    
     if (posts.length === 0) {
       return res.status(200).json([]);
     }

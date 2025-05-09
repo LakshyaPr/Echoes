@@ -152,3 +152,18 @@ export const updateUserProfile = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getUserProfiles = async (req, res) => {
+  const { username } = req.params; 
+  try {
+    let data = await User.find({
+      username: { $regex: username, $options: "i" }
+    }).select("-password");
+
+    res.status(200).json(data); 
+    
+  } catch (error) {
+    console.log("Error in getUserProfile", error.message);
+    res.status(500).json({ error: error.message });
+  }
+}
