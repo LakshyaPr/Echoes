@@ -1,24 +1,24 @@
-# ECHOES — Full-Stack Social Media App 🌐
+# ECHOES — Full-Stack Social Media App 
 
-[Live Demo 🔗](https://echoes-32t1.onrender.com/) <br>
+[Live Demo ](https://echoes-production.up.railway.app/) <br>
 **ECHOES** is a full-stack social media platform built with the **MERN stack**. It features secure authentication, image sharing, optimized APIs, and responsive design. Designed to simulate real-world scalability, the app emphasizes performance, clean architecture, and modern web practices.
 
 ---
 
-## 🚀 Features
+##  Features
 
-- 🔐 **JWT Authentication** — Secure login/registration with token-based authorization.
-- ⚛️ **React Query** — Handles asynchronous data with smart caching, background updates, and `mutate` for write operations.
-- 🖼️ **Image Uploads** — Users can create image-based posts with caption support.
-- 💬 **Likes & Comments** — Core SNS interactivity with database mapping.
-- 🔔 **Database-Driven Notifications** — Alerts users when their posts receive activity.
-- 📄 **Pagination** — Efficiently loads large datasets with server-side pagination.
-- 🔍 **Indexed Mongo Queries** — Up to 70% improvement in query times for better scalability.
-- 📱 **Responsive UI** — Built with TailwindCSS for mobile-first design.
+- **JWT Authentication** — Secure login/registration with token-based authorization.
+-  **React Query** — Handles asynchronous data with smart caching, background updates, and `mutate` for write operations.
+-  **Image Uploads** — Users can create image-based posts with caption support.
+-  **Likes & Comments** — Core SNS interactivity with database mapping.
+-  **Database-Driven Notifications** — Alerts users when their posts receive activity.
+-  **Pagination** — Efficiently loads large datasets with server-side pagination.
+-  **Indexed Mongo Queries** — Up to 70% improvement in query times for better scalability.
+-  **Responsive UI** — Built with TailwindCSS for mobile-first design.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Frontend      | Backend    | Database | Deployment |
 |---------------|------------|----------|------------|
@@ -31,7 +31,7 @@
 
 ---
 
-## 🔐 Security & Authentication
+##  Security & Authentication
 
 - Passwords encrypted with **bcrypt**
 - JWT-based session management
@@ -40,7 +40,7 @@
 
 ---
 
-## ⚡ Performance Optimizations
+##  Performance Optimizations
 
 - MongoDB **indexes** on users, posts, and notifications
 - API **pagination** for scalable content loading
@@ -54,7 +54,7 @@
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ![image](https://github.com/user-attachments/assets/103d6458-d3e8-40d0-b44a-a905fcfda15c)
 <br><br>
@@ -70,21 +70,21 @@
 
 ---
 
-## 📌 Future Improvements
+##  Future Improvements
 
 - Real-time notifications using WebSockets or Socket.io
-- Full-text search and tag filtering
+  
 
 
 ---
 
-## 🌐 Live Demo
+##  Live Demo
 
-**👉 [Try ECHOES Now](https://echoes-32t1.onrender.com/)**
+**👉 [Try ECHOES Now](https://echoes-production.up.railway.app/)**
 
 ---
 
-## 📫 Contact
+##  Contact
 
 Made with ❤️ by [Lakshya Prabhakar]  
 
