@@ -14,6 +14,7 @@
 -  **Database-Driven Notifications** — Alerts users when their posts receive activity.
 -  **Pagination** — Efficiently loads large datasets with server-side pagination.
 -  **Indexed Mongo Queries** — Up to 70% improvement in query times for better scalability.
+-  **Debounced SearchBar** -- search bar with debouncing to limit the api calls
 -  **Responsive UI** — Built with TailwindCSS for mobile-first design.
 
 ---
