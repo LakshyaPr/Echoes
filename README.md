@@ -24,7 +24,7 @@
 | Frontend      | Backend    | Database | Deployment |
 |---------------|------------|----------|------------|
 | ReactJS       | Node.js    | MongoDB  | Render     |
-| TailwindCSS   | Express.js | Mongoose |            |
+| TailwindCSS   | Express.js | Mongoose | Railway    |
 | React Query   |            |          |            |
 
 ---
